@@ -1,11 +1,16 @@
+/* IMPORT COMPONENTS */
 import {Box, Badge, Wrap, WrapItem, Text} from '@chakra-ui/react'
 
+/* ------------------------------------------------------------------------------------------------- */
+
+// Get course type string from shorthand form
 const getType = (type) => {
     if(type === 'thl') return ['Theory','Lab']
     if(type === 'emb') return ['Embedded Theory', 'Embedded Lab']
     if(type === 'sts') return ['Soft Skills']
 }
 
+// Get course category string from shorthand form
 const getCategory = (category) => {
     if(category === 'fc') return 'Foundation Core'
     if(category === 'dles') return 'Discipline Linked Engineering Sciences'
@@ -15,7 +20,9 @@ const getCategory = (category) => {
     if(category === 'ngc') return 'Non-Graded Core Requirement'
 }
 
-// To display information relating to selected course
+/* ------------------------------------------------------------------------------------------------- */
+
+/* COURSE INFO COMPONENT (To display information relating to selected course) */
 const CourseInfo = ({codes, titles, credits, type, category}) => {
 
     const color = 'purple'

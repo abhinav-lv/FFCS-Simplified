@@ -1,5 +1,9 @@
+/* IMPORT COMPONENTS */
 import {Box, Heading, Wrap, WrapItem, Text} from '@chakra-ui/react'
 
+/* ------------------------------------------------------------------------------------------------- */
+
+/* DETAILS COMPONENT */
 const Details = ({user, courses}) => {
 
     return (

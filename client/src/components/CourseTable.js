@@ -1,11 +1,13 @@
-import CourseInfo from '../components/CourseInfo'
+/* IMPORT COMPONENTS */
+import CourseInfo from './info/CourseInfo'
 import SlotTable from './SlotTable'
 
-const CourseTable = ({course, tabIndex, setTabIndex}) => {
+/* ------------------------------------------------------------------------------------------------- */
 
+/* COURSE TABLE COMPONENT */
+const CourseTable = ({course, tabIndex, setTabIndex}) => {
     return (
         <div>
-
             {/* Course Info */}
             <CourseInfo 
                 codes={{theory: course?.theoryCourseCode, lab: course?.labCourseCode}} 
@@ -17,7 +19,6 @@ const CourseTable = ({course, tabIndex, setTabIndex}) => {
 
             {/* Display Slots for selected course */}
             <SlotTable tabIndex={tabIndex} setTabIndex={setTabIndex} course={course}/>
-
         </div>
     )
 }

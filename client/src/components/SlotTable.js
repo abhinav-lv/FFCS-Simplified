@@ -1,107 +1,19 @@
-/* Import hooks */
-import { useState, useContext } from 'react'
+/* IMPORT HOOKS */
+import { useState } from 'react'
 
-/* Import context */
-import { CourseContext } from '../context/course'
+/* IMPORT COMPONENTS */
+import CourseModal from './modals/CourseModal'
+import { Table,Thead, Tbody, Tr, Th, Td, TableContainer, Button, Heading } from '@chakra-ui/react'
 
-/* Import components */
-import {
-    Table,Thead, Tbody, Tr, Th, Td, TableContainer,
-    Button, Heading, Badge, Box,
-    Modal, ModalOverlay, ModalContent, ModalHeader,ModalFooter, ModalBody, ModalCloseButton,
-  } from '@chakra-ui/react'
+/* ------------------------------------------------------------------------------------------------- */
 
+/* SLOT TABLE COMPONENT */
 const SlotTable = ({course, setTabIndex}) => {
 
     // To display modal when user picks a slot
     const [pickedSlot, setPickedSlot] = useState({})
 
-    // Context state
-    const state = useContext(CourseContext)
-
-    // Modal Component
-    const CourseModal = ({slot}) => {
-
-        const onClose = () => setPickedSlot({})
-        const onAddToTable = () => {
-            onClose()
-            state.setPickedCourse({
-                category: course.category,
-                type: course.courseType,
-                hasLabComponent: course.hasLabComponent,
-                theoryCourseCode: course.theoryCourseCode,
-                theoryCourseTitle: course.theoryCourseTitle,
-                theoryCourseCredits: course.theoryCourseCredits,
-                labCourseCode: course.labCourseCode,
-                labCourseTitle: course.labCourseTitle,
-                labCourseCredits: course.labCourseCredits,
-                faculty: pickedSlot.theory.faculty,
-                theoryCourseSlot: pickedSlot.theory.slot,
-                labCourseSlot: pickedSlot.lab?.slot,
-                theoryVenue: pickedSlot.theory.venue,
-                labVenue: pickedSlot.lab?.venue
-            })
-            setTabIndex(1)
-        }
-        const time = slot.theory.slot[0].slice(-1) === '1' ? 'Morning Theory' : 'Evening Theory'
-
-        return (
-            <Modal size='2xl' isOpen={Object.keys(pickedSlot).length ? true : false} onClose={onClose} isCentered motionPreset='slideInBottom'>
-                <ModalOverlay />
-                <ModalContent>
-                <ModalHeader>Confirm selection</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Box>
-                        <Badge mb='10px' colorScheme='orange'>{time}</Badge>
-                    </Box>
-                    <TableContainer>
-                        <Table variant='simple'>
-                            <Thead>
-                                <Tr>
-                                    <Th>Slot</Th>
-                                    <Th>Faculty</Th>
-                                    <Th>Venue</Th>
-                                    <Th>Component</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                <Tr>
-                                    <Td>{slot.theory.slot.join('+')}</Td>
-                                    <Td>{slot.theory.faculty}</Td>
-                                    <Td>{slot.theory.venue}</Td>
-                                    <Td>
-                                        <Badge colorScheme='purple'>Theory</Badge>
-                                    </Td>
-                                </Tr>
-                                {slot.lab ? 
-                                    <Tr>
-                                        <Td>{slot.lab.slot.join('+')}</Td>
-                                        <Td>{slot.lab.faculty}</Td>
-                                        <Td>{slot.lab.venue}</Td>
-                                        <Td>
-                                            <Badge colorScheme='pink'>Lab</Badge>
-                                        </Td>
-                                    </Tr> : <></>}
-                            </Tbody>
-                        </Table>
-                    </TableContainer>
-                </ModalBody>
-
-                <ModalFooter>
-                    <Button variant='ghost' colorScheme='red' mr={3} onClick={onClose}>
-                    Close
-                    </Button>
-                    <Button variant='ghost' colorScheme='blue' onClick={onAddToTable}>
-                        Add to Table
-                    </Button>
-                </ModalFooter>
-                </ModalContent>
-            </Modal>
-        )
-    }
-
-    // On clicking the 'pick' button to pick a slot
+    // Execute on clicking the 'pick' button to pick a slot
     const coursePick = (e) => {
         const picked = e.target.id.split('-')
         const slot = picked[0].split('+')
@@ -177,7 +89,7 @@ const SlotTable = ({course, setTabIndex}) => {
         })
     }
 
-    // Get slot elements for the table
+    // Get slot elements (rows) for the table
     const getSlotElements = (slots) => {
         return slots?.map((slot) => {
             return (
@@ -195,8 +107,14 @@ const SlotTable = ({course, setTabIndex}) => {
 
     return (
         <>
-
-            {Object.keys(pickedSlot).length === 0 ? <p></p> : <CourseModal slot={pickedSlot}/>}
+            {Object.keys(pickedSlot).length === 0 ? <p></p> 
+            : <CourseModal 
+                slot={pickedSlot} 
+                pickedSlot={pickedSlot} 
+                setPickedSlot={setPickedSlot}
+                course={course}
+                setTabIndex={setTabIndex}
+              />}
 
             {/* Theory Slots Table */}
             <Heading size='lg' color='gray.700' marginTop='35px'>Slots</Heading>
@@ -236,7 +154,6 @@ const SlotTable = ({course, setTabIndex}) => {
                 </Table>
             </TableContainer> 
             </> : <p></p>}
-
         </>
     )
 }

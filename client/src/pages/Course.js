@@ -1,16 +1,19 @@
-/* Import packages */
+/* IMPORT HOOKS */
+import { useState, useEffect } from 'react'
+
+/* IMPORT PACKAGES */
 import axios from 'axios'
-import { useState, useEffect } from "react"
 
-/* Import components */ 
+/* IMPORT COMPONENTS */ 
 import NavBar from '../components/NavBar'
-import Details from '../components/Details'
-import CourseTable from '../components/CourseTable'
-import Tables from '../components/Tables'
-import { Select, Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import TablesTab from '../components/tabs/TablesTab'
+import CoursesTab from '../components/tabs/CoursesTab'
+import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
-/* Import context */
+/* IMPORT CONTEXT */
 import { CourseContextProvider } from '../context/course'
+
+/* ------------------------------------------------------------------------------------------------- */
 
 // Authorize user with server
 const authorize = async (setUser) => {
@@ -29,85 +32,20 @@ const authorize = async (setUser) => {
     }
 }
 
-// Get shortened array of objects where each object has course code and title
-const getCourseNames = (courses) => {
-    return courses.map((course) => {
-        return {
-            code: course.theoryCourseCode, 
-            title: course.theoryCourseTitle
-        }
-    })
-}
+/* ------------------------------------------------------------------------------------------------- */
 
-// Get <option> elements for <select> element
-const getCourseOptionElements = (courseNames) => courseNames.map((course) => {
-    return <option key={course.code} value={course.code}>{course.code+' - '+course.title}</option>
-})
-
-// Courses component
-const Courses = ({user, tabIndex, setTabIndex}) => {
-    const [courses, setCourses] = useState([])
-    const [selectedCourse, setSelectedCourse] = useState(courses[0])
-
-    // Get courses from server on first render
-    useEffect(function(){
-        const getData = async () => {
-            const courseData = await axios.post('/courses/get-courses', {
-                class: user.class,
-                school: user.school,
-            })
-            setCourses(courseData.data)
-        }
-        getData()
-        // eslint-disable-next-line
-    },[])
-
-    const handleChange = (e) => {
-        courses.forEach((course) => {
-            if(course.theoryCourseCode === e.target.value) setSelectedCourse(course)
-        })
-    }
-
-    // courseNames = [{code: 'BCSE307L', title:'Compiler Design'}, ...]
-    const courseNames = getCourseNames(courses)
-
-    // courseOption = <option>BCSE307L - Compiler Design</option>
-    const courseOptionElements = getCourseOptionElements(courseNames)
-
-    return(
-        <Box width='90%' margin='auto' mt='25px'>
-            <Details user={user} courses={courses}/>
-            <Select 
-                margin='auto' 
-                marginTop='50px' 
-                placeholder="Select course"
-                name="courseSelect" 
-                value={selectedCourse?.theoryCourseCode}
-                onChange={handleChange}
-            >
-                {courseOptionElements}
-            </Select>
-            {selectedCourse ? <Box margin='auto' marginTop='25px'>
-                                <CourseTable
-                                    tabIndex={tabIndex}
-                                    setTabIndex={setTabIndex} 
-                                    course={selectedCourse}
-                                />
-                            </Box> : <p></p>}
-        </Box>
-    )
-}
-
-// Course Page
+/* COURSE PAGE */
 const Course = () => {
 
+    // States
+    const [tabIndex, setTabIndex] = useState(0)
     const [user, setUser] = useState({
         authorized: false,
         user: {},
     })
+    
+    // Authorize user at first render
     useEffect(function (){authorize(setUser)}, [])
-
-    const [tabIndex, setTabIndex] = useState(0)
 
     return user.authorized ? (
         <CourseContextProvider>
@@ -126,10 +64,10 @@ const Course = () => {
 
                     <TabPanels>
                         <TabPanel>
-                            <Courses tabIndex={tabIndex} setTabIndex={setTabIndex} user={user.user}/>
+                            <CoursesTab user={user.user} tabIndex={tabIndex} setTabIndex={setTabIndex}/>
                         </TabPanel>
                         <TabPanel>
-                            <Tables tabIndex={tabIndex} setTabIndex={setTabIndex}/>
+                            <TablesTab tabIndex={tabIndex} setTabIndex={setTabIndex}/>
                         </TabPanel>
                         <TabPanel>
                             Share the tables you've made

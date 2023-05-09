@@ -1,6 +1,11 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+/* IMPORT PACKAGES */
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import {ChakraProvider} from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
+
+/* IMPORT ROUTES */
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+
+/* IMPORT PAGES */
 import Login from './pages/Login'
 import Admin from './pages/Admin'
 import Logout from './pages/Logout'
@@ -8,6 +13,7 @@ import Dashboard from './pages/Dashboard'
 import Course from './pages/Course'
 import Rough from './pages/Rough'
 
+/* APP */
 function App() {
 
   return (
