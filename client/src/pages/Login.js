@@ -1,27 +1,33 @@
-import { Box, Heading, Text} from '@chakra-ui/react'
-import { useGoogleLogin, GoogleLogin } from "@react-oauth/google"
+/* IMPORT HOOKS */
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+
+/* IMPORT PACKAGES */
 import axios from 'axios'
+import { useGoogleLogin, GoogleLogin } from "@react-oauth/google"
+
+/* IMPORT COMPONENTS */
+import { Box, Heading, Text} from '@chakra-ui/react'
+
+/* IMPORT STYLES */
 import '../styles/Login.css'
 
-// Images
-// import googleIcon from '../assets/google.png'
+/* ------------------------------------------------------------------------------------------------- */
 
-// Card component
+/* LOGIN CARD COMPONENT */
 const LoginCard = ({googleLogin}) => {
     return (
         <Box maxW='32rem' margin='200px 0 0 0'>
             <Heading fontSize='60px' mb={8}>Need help with your FFCS?</Heading>
             <Text fontSize='20px' fontWeight='bold' color='gray.600'>We've got you covered! 😄</Text>
             <Text fontSize='20px' fontWeight='normal' marginBottom='50px' color='gray.500'>Just sign in with your VIT email ID to get started.</Text>
-            {/* <Button variant='outline' size='lg' colorScheme='gray' onClick={googleLogin}>
-                <Image src={googleIcon} alt='Google Icon' maxW={{base:'100%', sm:'20px'}}/>
-                <Text marginLeft='15px'>Sign in</Text>
-            </Button> */}
         </Box>
     )
 }
 
+/* ------------------------------------------------------------------------------------------------- */
+
+/* LOGIN PAGE */
 const LoginPage = () => {
 
     // Navigate Hook
@@ -43,6 +49,21 @@ const LoginPage = () => {
         onError: onError,
         flow: 'auth-code'
     })
+
+    const authorize = async () => {
+        try{
+            await axios.get('/auth/authorize')
+            navigate('/dashboard')
+
+        }
+        catch(error){
+            // Not logged in
+        }
+    }
+
+    useEffect(function() {
+        authorize() // eslint-disable-next-line
+    },[])
 
     return (
         <div>

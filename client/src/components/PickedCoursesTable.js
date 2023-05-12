@@ -302,12 +302,40 @@ const PickedCoursesTable = ({setTabIndex}) => {
         }
     }
 
+    useEffect(function() {
+        const localCourses = JSON.parse(localStorage.getItem('courses'))
+        setCourses(localCourses)
+    },[])
+
     // Add course only when picked course changes
     useEffect(function(){
         checkSameCourse() 
         checkClashingSlots()    
         addNewCourse()          // eslint-disable-next-line
     },[state.pickedCourse])
+
+    // Add courses
+    useEffect(function() {
+        localStorage.setItem('courses', JSON.stringify(courses))
+    },[courses])
+
+    const deleteCourse = (e) => {
+        const deleteCourseCode = e.target.id
+        console.log(deleteCourseCode)
+        let pickedCourse = ''
+
+        for(let i=0; i<courses?.length; i++){
+            if(courses[i].theoryCourseCode.slice(0,-1) === deleteCourseCode){
+                pickedCourse=JSON.stringify(courses[i])
+                break
+            }
+        }
+
+        let tempCourses = courses.slice()
+        tempCourses = removeCourse(tempCourses, pickedCourse)
+        console.log(tempCourses)
+        setCourses(tempCourses)
+    }
 
     // Get course elements for table (rows)
     const getCourseElements = () => {
@@ -348,6 +376,9 @@ const PickedCoursesTable = ({setTabIndex}) => {
                     <Td>{course.faculty}</Td>
                     <Td>{course.venue}</Td>
                     <Td>{course.credits}</Td>
+                    <Td>
+                    <Button id={course.code.slice(0,-1)} variant='solid' size='xs' colorScheme='red' onClick={deleteCourse}>Delete</Button>
+                    </Td>
                 </Tr>
             )
         })
@@ -368,6 +399,7 @@ const PickedCoursesTable = ({setTabIndex}) => {
                         <Th>Faculty</Th>
                         <Th>Venue</Th>
                         <Th>Credits</Th>
+                        <Th>Delete</Th>
                     </Tr>
                     </Thead>
                     <Tbody>

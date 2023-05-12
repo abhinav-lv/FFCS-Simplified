@@ -6,6 +6,7 @@ import axios from 'axios'
 
 /* IMPORT COMPONENTS */ 
 import NavBar from '../components/NavBar'
+import Forbidden from '../components/Forbidden'
 import TablesTab from '../components/tabs/TablesTab'
 import CoursesTab from '../components/tabs/CoursesTab'
 import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
@@ -77,7 +78,7 @@ const Course = () => {
                 </Tabs>
             </Box>
         </CourseContextProvider>
-    ) : <p>Forbidden</p>
+    ) : <Forbidden message={{status: 'Forbidden', description: 'You don\'t have access to this page'}}/>
 
 }
 
